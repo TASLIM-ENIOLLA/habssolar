@@ -1,12 +1,12 @@
 "use client";
 
-import { Fragment, useState, useEffect, useActionState } from "react";
+import { Fragment, useEffect, useActionState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { postOrder } from "./actions";
 
-export function Form({ wattageNPrice }: any) {
+export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string; option: string }[]}) {
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
@@ -147,8 +147,8 @@ export function Form({ wattageNPrice }: any) {
 						className="p-3 w-full block border rounded-lg bg-transparent"
 					>
 						<option value="">Select wattage and price</option>
-						{wattageNPrice.map(({ value, option }: any, index: number) => (
-							<Fragment key={value}>
+						{wattageNPrice?.map(({ value, option }: { value: string, option: string }, index: number) => (
+							<Fragment key={index}>
 								<option value={value}>{option}</option>
 							</Fragment>
 						))}

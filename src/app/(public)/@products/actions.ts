@@ -22,6 +22,6 @@ import { GetProduct } from "./types";
 // 	});
 // }
 
-export async function getProductList() {
+export async function getProductList(): Promise<GetProduct[]> {
 	return getProducts();
 }

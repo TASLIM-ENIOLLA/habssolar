@@ -1,7 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
-
 export default function Page() {
 	return (
 		<section className="py-20">

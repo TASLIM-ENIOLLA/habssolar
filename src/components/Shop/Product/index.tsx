@@ -3,10 +3,9 @@ import Image from "next/image";
 
 import { ShoppingCart } from "lucide-react";
 
-import { parseFile } from "./utils";
 import { ProductProps } from "./types";
 
-export default function Product({ id, name, images, price, quantity, rating, description }: ProductProps) {
+export default function Product({ id, name, images, price, description }: ProductProps) {
 	const currencyFormat = new Intl.NumberFormat("en-NG", {
 		style: "currency",
 		currency: "NGN",

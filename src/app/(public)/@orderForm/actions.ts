@@ -3,11 +3,9 @@
 import Pocketbase from "@/libs/pocketbase";
 import { transporter } from "@/libs/mailer";
 
-import { ProductProps } from "@/components/Shop/Product/types";
-
 import { MakeOrder } from "./types";
 
-export async function getWattageNPrice() {
+export async function getWattageNPrice(): Promise<null | { value: string; option: string }[]> {
 	const currencyFormat = new Intl.NumberFormat("en-NG", {
 		style: "currency",
 		currency: "NGN",
@@ -25,7 +23,9 @@ export async function getWattageNPrice() {
 			}
 		});
 	}
-	catch(error: any) {
+	catch(error: unknown) {
+		console.error(error);
+
 		return null;
 	}
 }
@@ -64,8 +64,8 @@ export async function postOrder(currentState: MakeOrder, formData: FormData): Pr
 			message: "All went well"
 		}
 	}
-	catch(error: any) {
-		console.log({ error });
+	catch(error: unknown) {
+		console.error(error);
 
 		return {
 			formData,

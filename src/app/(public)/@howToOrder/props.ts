@@ -1,4 +1,4 @@
-import { Sun, Blocks, PlugZap, Droplet, HousePlug, Hourglass, Lightbulb, UtilityPole, SlidersHorizontal } from "lucide-react";
+import { Sun, PlugZap, Droplet, Hourglass, Lightbulb } from "lucide-react";
 
 import { Instruction } from "./types";
 
