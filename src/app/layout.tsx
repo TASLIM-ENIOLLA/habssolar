@@ -5,7 +5,9 @@ import "@/css/globals.css";
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      {children}
+      <body>
+        {children}
+      </body>
     </html>
   );
 }
