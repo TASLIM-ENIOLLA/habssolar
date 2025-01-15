@@ -1,9 +1,34 @@
 "use server";
 
-import Pocketbase from "@/libs/pocketbase";
 import { transporter } from "@/libs/mailer";
+import { getProduct, getProducts } from "@/libs/products";
 
 import { MakeOrder } from "./types";
+
+// export async function getWattageNPrice(): Promise<null | { value: string; option: string }[]> {
+// 	const currencyFormat = new Intl.NumberFormat("en-NG", {
+// 		style: "currency",
+// 		currency: "NGN",
+// 		minimumFractionDigits: 2,
+// 		maximumFractionDigits: 2,
+// 	});
+
+// 	try {
+// 		const data = await Pocketbase.collection("products").getFullList({ sort: "-updated" });
+
+// 		return data.map(({ id, name, price }) => {
+// 			return {
+// 				value: id,
+// 				option: `${name} - ${currencyFormat.format(price)}`
+// 			}
+// 		});
+// 	}
+// 	catch(error: unknown) {
+// 		console.error(error);
+
+// 		return null;
+// 	}
+// }
 
 export async function getWattageNPrice(): Promise<null | { value: string; option: string }[]> {
 	const currencyFormat = new Intl.NumberFormat("en-NG", {
@@ -13,29 +38,20 @@ export async function getWattageNPrice(): Promise<null | { value: string; option
 		maximumFractionDigits: 2,
 	});
 
-	try {
-		const data = await Pocketbase.collection("products").getFullList({ sort: "-updated" });
-
-		return data.map(({ id, name, price }) => {
-			return {
-				value: id,
-				option: `${name} - ${currencyFormat.format(price)}`
-			}
-		});
-	}
-	catch(error: unknown) {
-		console.error(error);
-
-		return null;
-	}
+	return getProducts().map(({ id, name, price }) => {
+		return {
+			value: id,
+			option: `${name} - ${currencyFormat.format(price)}`
+		}
+	});
 }
 
 export async function postOrder(currentState: MakeOrder, formData: FormData): Promise<MakeOrder> {
 	const formObject = Object.fromEntries(formData);
 
-	try {
-		console.log({ formObject });
+	const productData = getProduct(formObject.productNPrice as string);
 
+	try {
 		await transporter.sendMail({
 			from: "Habs E-commerce <Automated Ordering System>",
 			to: process.env.GMAIL_ADDRESS,
@@ -52,6 +68,9 @@ export async function postOrder(currentState: MakeOrder, formData: FormData): Pr
 							Phone number:- ${formObject.phone}.<br />
 							WhatsApp number:- ${formObject.whatsAppNo}.<br />
 							<hr />
+							Product name:- ${productData.name}
+							Product price:- ${productData.price}
+							Product quantity:- ${formObject.price}
 						</h5>
 					</body>
 				</html>

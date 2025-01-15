@@ -13,6 +13,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
 }
 
 export const metadata: Metadata = {
-  title: "Don Bee Store",
+  title: "Habs Solar",
   description: "An ecommerce web store",
 };
