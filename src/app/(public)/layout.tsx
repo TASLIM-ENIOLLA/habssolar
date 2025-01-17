@@ -1,6 +1,4 @@
-import { LayoutProps } from "./types";
-
-export default function Layout({ hero, header, footer, benefits, products, warning, orderForm, howToOrder }: LayoutProps) {
+export default function Layout({ hero, header, footer, benefits, products, warning, orderForm, howToOrder }: any) {
 	return (
 		<main className="mx-auto max-w-5xl">
 			{header}
