@@ -1,18 +1,33 @@
 "use client";
 
-import { Fragment, useEffect, useActionState } from "react";
+import { Fragment, useMemo, useState, useEffect, useActionState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { getProduct } from "@/libs/products";
+
 import { postOrder } from "./actions";
 
-export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string; option: string }[]}) {
+export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string; option: string, price: number }[]}) {
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
 	const productID = searchParams.get("productID") || "";
 
 	const [formState, formAction, isPending] = useActionState(postOrder, null);
+
+	const [minQuantity, setMinQuantity] = useState <number> (2);
+	const [productId, setProductId] = useState <string> (productID);
+
+	const priceTotal = useMemo(() => {
+		const productData = getProduct(productId);
+
+		if(productData?.price && minQuantity) {
+			return productData.price * minQuantity;
+		}
+
+		return 0;
+	}, [productId, minQuantity]);
 
 	useEffect(() => {
 		if(formState) {
@@ -141,15 +156,19 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 						</span>
 					</p>
 					<select
-						onChange={() => null}
 						name="productNPrice"
 						value={productID || formState?.formData.get("productNPrice") as string}
 						className="p-3 w-full block border rounded-lg bg-transparent"
+						onChange={(event: any) => {
+							event.preventDefault();
+
+							setProductId(event.target.value);
+						}}
 					>
 						<option value="">Select wattage and price</option>
-						{wattageNPrice?.map(({ value, option }: { value: string, option: string }, index: number) => (
+						{wattageNPrice?.map(({ value, option, price }: { value: string, option: string, price: number }, index: number) => (
 							<Fragment key={index}>
-								<option value={value}>{option}</option>
+								<option data-price={price} value={value}>{option}</option>
 							</Fragment>
 						))}
 					</select>
@@ -167,6 +186,11 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 						name="quantity"
 						defaultValue={formState?.formData.get("quantity") as string || "2"}
 						className="p-3 w-full block border rounded-lg bg-transparent"
+						onChange={(event: any) => {
+							event.preventDefault();
+
+							setMinQuantity(Number(event.target.value));
+						}}
 					>
 						<option value="">Select product quantity</option>
 						{getQuantityRange(2, 10).map((quantity: number) => (
@@ -175,6 +199,27 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 							</Fragment>
 						))}
 					</select>
+				</div>
+			</div>
+			<div className="col-span-12">
+				<div className="space-y-2">
+					<p className="text-base font-semibold">
+						<span className="capitalize">
+							Price total
+						</span>
+					</p>
+					<input required
+						disabled
+						type="text"
+						name="priceTotal"
+						defaultValue={new Intl.NumberFormat("en-NG", {
+							style: "currency",
+							currency: "NGN",
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+						}).format(priceTotal)}
+						className="p-3 w-full block border rounded-lg"
+					/>
 				</div>
 			</div>
 			<div className="col-span-12">

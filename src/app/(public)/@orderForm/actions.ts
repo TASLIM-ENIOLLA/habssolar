@@ -30,7 +30,7 @@ import { MakeOrder } from "./types";
 // 	}
 // }
 
-export async function getWattageNPrice(): Promise<null | { value: string; option: string }[]> {
+export async function getWattageNPrice(): Promise<null | { value: string; option: string, price: number }[]> {
 	const currencyFormat = new Intl.NumberFormat("en-NG", {
 		style: "currency",
 		currency: "NGN",
@@ -40,8 +40,9 @@ export async function getWattageNPrice(): Promise<null | { value: string; option
 
 	return getProducts().map(({ id, name, price }) => {
 		return {
+			price,
 			value: id,
-			option: `${name} - ${currencyFormat.format(price)}`
+			option: `${name} - ${currencyFormat.format(price)}`,
 		}
 	});
 }
@@ -68,9 +69,9 @@ export async function postOrder(currentState: MakeOrder, formData: FormData): Pr
 							Phone number:- ${formObject.phone}.<br />
 							WhatsApp number:- ${formObject.whatsAppNo}.<br />
 							<hr />
-							Product name:- ${productData.name}
-							Product price:- ${productData.price}
-							Product quantity:- ${formObject.price}
+							Product name:- ${productData?.name}
+							Product price:- ${productData?.price}
+							Product quantity:- ${formObject?.price}
 						</h5>
 					</body>
 				</html>
