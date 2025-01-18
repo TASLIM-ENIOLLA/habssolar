@@ -69,9 +69,9 @@ export async function postOrder(currentState: MakeOrder, formData: FormData): Pr
 							Phone number:- ${formObject.phone}.<br />
 							WhatsApp number:- ${formObject.whatsAppNo}.<br />
 							<hr />
-							Product name:- ${productData?.name}
-							Product price:- ${productData?.price}
-							Product quantity:- ${formObject?.price}
+							Product name:- ${productData?.name}<br />
+							Product price:- ${productData?.price}<br />
+							Product quantity:- ${formObject?.quantity}<br />
 						</h5>
 					</body>
 				</html>

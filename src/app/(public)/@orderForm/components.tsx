@@ -1,33 +1,19 @@
 "use client";
 
-import { Fragment, useMemo, useState, useEffect, useActionState } from "react";
+import { Fragment, useContext, useEffect, useActionState } from "react";
 
-import { useRouter, useSearchParams } from "next/navigation";
-
-import { getProduct } from "@/libs/products";
+import { useRouter } from "next/navigation";
 
 import { postOrder } from "./actions";
+
+import { OrderContext } from "../context";
 
 export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string; option: string, price: number }[]}) {
 	const router = useRouter();
 
-	const searchParams = useSearchParams();
-	const productID = searchParams.get("productID") || "";
-
 	const [formState, formAction, isPending] = useActionState(postOrder, null);
 
-	const [minQuantity, setMinQuantity] = useState <number> (2);
-	const [productId, setProductId] = useState <string> (productID);
-
-	const priceTotal = useMemo(() => {
-		const productData = getProduct(productId);
-
-		if(productData?.price && minQuantity) {
-			return productData.price * minQuantity;
-		}
-
-		return 0;
-	}, [productId, minQuantity]);
+	const [priceTotalParams, updateTotalParams]: any = useContext(OrderContext);
 
 	useEffect(() => {
 		if(formState) {
@@ -157,12 +143,17 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 					</p>
 					<select
 						name="productNPrice"
-						value={productID || formState?.formData.get("productNPrice") as string}
+						value={priceTotalParams.id || formState?.formData.get("productNPrice") as string}
 						className="p-3 w-full block border rounded-lg bg-transparent"
 						onChange={(event: any) => {
 							event.preventDefault();
 
-							setProductId(event.target.value);
+							const select = event.target;
+							const selectIndex = select.selectedIndex;
+							const selectOption = select.options[selectIndex];
+
+							updateTotalParams("id", select.value);
+							updateTotalParams("price", selectOption.dataset.price);
 						}}
 					>
 						<option value="">Select wattage and price</option>
@@ -189,7 +180,7 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 						onChange={(event: any) => {
 							event.preventDefault();
 
-							setMinQuantity(Number(event.target.value));
+							updateTotalParams("quantity", event.target.value);
 						}}
 					>
 						<option value="">Select product quantity</option>
@@ -217,7 +208,7 @@ export function Form({ wattageNPrice }: { wattageNPrice: null | { value: string;
 							currency: "NGN",
 							minimumFractionDigits: 2,
 							maximumFractionDigits: 2,
-						}).format(priceTotal)}
+						}).format(priceTotalParams.price * priceTotalParams.quantity)}
 						className="p-3 w-full block border rounded-lg"
 					/>
 				</div>

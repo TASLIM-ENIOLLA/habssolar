@@ -13,7 +13,7 @@ export default function Page() {
 						</h4>
 						<p className="text-lg font-medium">
 							<span className="sentence text-slate-600">
-								if you are not readily available to receive the product or you don’t have money to pay on delivery, do not fill the order form. it costs us money and human resources to process a order. you can call / whatsapp +234 (0) 911-0562-369 to schedule delivery date
+								if you are not readily available to receive the product or you don’t have money to pay on delivery, do not fill the order form. it costs us money and human resources to process a order. you can call / whatsapp +234 (0) 909-2170-419 to schedule delivery date
 							</span>
 						</p>
 					</div>

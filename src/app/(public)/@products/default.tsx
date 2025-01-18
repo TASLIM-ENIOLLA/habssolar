@@ -1,11 +1,7 @@
 "use server";
 
-import { Fragment } from "react";
-
-import Product from "@/components/Shop/Product";
-
-import { GetProduct } from "./types";
 import { getProductList } from "./actions";
+import { ProductList } from "./components";
 
 export default async function Page() {
 	const products = await getProductList();
@@ -26,13 +22,7 @@ export default async function Page() {
 							</span>
 						</p>
 					</div>
-					<div className="space-y-10">
-						{products.map((props: GetProduct, index: number) => (
-							<Fragment key={index}>
-								<Product {...props} />
-							</Fragment>
-						))}
-					</div>
+					<ProductList products={products} />
 				</div>
 			</div>
 		</section>

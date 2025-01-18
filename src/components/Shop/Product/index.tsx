@@ -1,17 +1,24 @@
-import Link from "next/link";
 import Image from "next/image";
 
 import { ShoppingCart } from "lucide-react";
 
 import { ProductProps } from "./types";
 
-export default function Product({ id, name, images, price, description }: ProductProps) {
+export default function Product({ id, name, images, price, description, onSelect }: ProductProps) {
 	const currencyFormat = new Intl.NumberFormat("en-NG", {
 		style: "currency",
 		currency: "NGN",
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 	});
+
+	function onClick(event: any): void {
+		event.preventDefault();
+
+		if(typeof onSelect === "function") {
+			onSelect({ id, name, images, price, description });
+		}
+	}
 
 	return (
 		<article className="border rounded-lg overflow-hidden">
@@ -42,7 +49,7 @@ export default function Product({ id, name, images, price, description }: Produc
 					</span>
 				</h4>
 				<div className="pt-7">
-					<Link href={`?productID=${id}#order-form`} className="p-3 w-full block rounded-lg bg-green-600">
+					<button type="button" onClick={onClick} className="p-3 w-full block rounded-lg bg-green-600">
 						<div className="flex gap-3 items-center justify-center">
 							<div className="flex-none">
 								<ShoppingCart
@@ -59,7 +66,7 @@ export default function Product({ id, name, images, price, description }: Produc
 								</p>
 							</div>
 						</div>
-					</Link>
+					</button>
 				</div>
 			</div>
 		</article>

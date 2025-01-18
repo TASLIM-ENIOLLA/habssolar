@@ -1,9 +1,14 @@
-export type ProductProps = {
+export type Product = {
 	id: string;
 	name: string;
 	price: number;
-	rating: number;
 	images: string[];
-	quantity: number;
 	description: string;
+	
+	rating?: number;
+	quantity?: number;
+}
+
+export type ProductProps = Product & {
+	onSelect?: (props: Product) => void;
 }
